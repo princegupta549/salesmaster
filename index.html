@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f243e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SalesMaster" />
+  <title>SalesMaster — Smart CRM • UAE Edition</title>
+  <style>
+    :root {
+      --navy: #0f243e;
+      --navy-dark: #081526;
+      --blue: #1d6fd8;
+      --blue-soft: #eef5ff;
+      --green: #16a34a;
+      --green-bright: #22c55e;
+      --orange: #ea580c;
+      --purple: #7c3aed;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 84px; }
+
+    /* Top Header */
+    .topbar {
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+      color: #fff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 4px 14px rgba(15, 36, 62, 0.22);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-badge {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, #38bdf8, #1d4ed8);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 16px; color: #fff;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
+    }
+    .brand-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+    .brand-title span { color: #38bdf8; }
+    .brand-sub { font-size: 10px; letter-spacing: 1px; color: #cbd5e1; text-transform: uppercase; margin-top: 2px; }
+    .top-actions { display: flex; gap: 8px; }
+    .icon-btn {
+      height: 34px; padding: 0 10px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 12px; font-weight: 700; gap: 4px;
+    }
+
+    .container { max-width: 540px; margin: 0 auto; padding: 14px; }
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* KPI Grid */
+    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .kpi-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 13px 15px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+    .kpi-label { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 5px; }
+    .kpi-val { font-size: 25px; font-weight: 800; line-height: 1.1; }
+    .c-black { color: #0f172a; }
+    .c-blue { color: var(--blue); }
+    .c-orange { color: var(--orange); }
+    .c-purple { color: var(--purple); }
+    .c-green { color: var(--green); }
+
+    .kpi-wide {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 13px 15px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+
+    /* Dialer Focus Card */
+    .dial-card {
+      background: linear-gradient(145deg, #0b2239, #083328);
+      color: #fff; border-radius: 18px; padding: 18px; margin-bottom: 14px;
+      box-shadow: 0 10px 24px rgba(11, 34, 57, 0.22);
+    }
+    .dial-meta-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .pill-next {
+      background: rgba(34, 197, 94, 0.2); color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.35);
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+    }
+    .queue-text { font-size: 12px; color: #cbd5e1; }
+    .badges-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .pill-ai {
+      background: rgba(245, 158, 11, 0.18); color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+    }
+    .pill-agent {
+      background: rgba(99, 102, 241, 0.28); color: #e0e7ff;
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    }
+    .lead-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .lead-sub { font-size: 13px; color: #cbd5e1; margin-bottom: 14px; }
+
+    .action-row { display: grid; grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr; gap: 8px; margin-bottom: 10px; }
+    .btn-call {
+      background: var(--green-bright); color: #fff; border: none; border-radius: 12px;
+      padding: 11px 10px; font-weight: 800; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none;
+    }
+    .btn-sec {
+      background: rgba(255,255,255,0.1); color: #fff;
+      border: 1px solid rgba(255,255,255,0.18); border-radius: 12px;
+      padding: 9px 6px; font-weight: 700; font-size: 12px; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    }
+    .status-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .btn-status {
+      background: rgba(255,255,255,0.08); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 8px; padding: 7px 6px; font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+
+    /* Cards & Inputs */
+    .card-box {
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 14px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+    .card-box h3 { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+    .card-box p { font-size: 13px; color: #334155; line-height: 1.45; }
+
+    .search-box {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 11px 14px; display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    }
+    .search-box input, .input-field, select, textarea {
+      width: 100%; font-size: 14px; color: var(--text); background: #fff;
+      border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; outline: none;
+    }
+    .search-box input { border: none; padding: 0; }
+
+    .lead-item {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    }
+    .lead-item-name { font-weight: 700; font-size: 14px; }
+    .lead-item-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .tag {
+      font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 8px;
+      background: var(--blue-soft); color: var(--blue); white-space: nowrap;
+    }
+
+    .btn-primary {
+      width: 100%; background: var(--blue); color: #fff; border: none; border-radius: 12px;
+      padding: 12px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px;
+    }
+
+    /* Flyer Preview */
+    .flyer-box {
+      background: linear-gradient(135deg, #0f243e, #1e3a8a); color: #fff;
+      border-radius: 16px; padding: 18px; margin-top: 10px;
+    }
+    .flyer-box h4 { font-size: 18px; font-weight: 800; margin-bottom: 6px; color: #38bdf8; }
+    .flyer-box ul { padding-left: 18px; font-size: 13px; line-height: 1.6; margin: 10px 0; }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
+      border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(4, 1fr);
+      padding: 8px 4px 12px; z-index: 40;
+    }
+    .nav-btn {
+      background: none; border: none; color: var(--muted); font-size: 11px; font-weight: 700;
+      display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer;
+    }
+    .nav-btn.active { color: var(--blue); }
+    .nav-btn span.ico { font-size: 18px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-badge">SM</div>
+      <div>
+        <div class="brand-title">Sales<span>Master</span></div>
+        <div class="brand-sub">SMART CRM • UAE EDITION</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="openAddModal()">＋ Lead</button>
+      <button class="icon-btn" onclick="resetDemo()">↻</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- TAB 1: DIALER & DASHBOARD -->
+    <section id="view-dialer" class="view active">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">Total Team Leads</div><div class="kpi-val c-black" id="kpi-total">4</div></div>
+        <div class="kpi-card"><div class="kpi-label">Pending Calls</div><div class="kpi-val c-blue" id="kpi-pending">2</div></div>
+        <div class="kpi-card"><div class="kpi-label">Interested / Hot</div><div class="kpi-val c-orange" id="kpi-hot">0</div></div>
+        <div class="kpi-card"><div class="kpi-label">Callbacks Due</div><div class="kpi-val c-purple" id="kpi-callback">1</div></div>
+      </div>
+
+      <div class="kpi-wide">
+        <div>
+          <div class="kpi-label">Cards Approved</div>
+          <div class="kpi-val c-green" id="kpi-approved">1</div>
+        </div>
+        <span class="tag">UAE Banking Desk</span>
+      </div>
+
+      <div class="dial-card">
+        <div class="dial-meta-top">
+          <span class="pill-next">NEXT TO DIAL</span>
+          <span class="queue-text" id="queue-count">3 in queue</span>
+        </div>
+        <div class="badges-row">
+          <span class="pill-ai" id="lead-ai">AI 75% • RAKBANK</span>
+          <span class="pill-agent" id="lead-agent">Agent: Rahul Sharma</span>
+        </div>
+        <div class="lead-name" id="lead-name">Khalid Al Falasi (Emirates)</div>
+        <div class="lead-sub" id="lead-sub">+971 50 482 9104 • 18,500 AED</div>
+
+        <div class="action-row">
+          <a class="btn-call" id="btn-call" href="tel:+971504829104">📞 Call Now</a>
+          <button class="btn-sec" onclick="sendWA()">💬<span>WA</span></button>
+          <button class="btn-sec" onclick="toggleAI()">✨<span>AI</span></button>
+          <button class="btn-sec" onclick="skipLead()">⏭<span>Skip</span></button>
+        </div>
+
+        <div class="status-row">
+          <button class="btn-status" onclick="markStatus('Hot')">🔥 Hot Lead</button>
+          <button class="btn-status" onclick="markStatus('Callback')">⏰ Callback</button>
+          <button class="btn-status" onclick="markStatus('Approved')">✅ Approved</button>
+        </div>
+      </div>
+
+      <div class="card-box" id="ai-box" style="display:none;">
+        <h3>✨ AI Call Pitch & Objection Script</h3>
+        <p id="ai-text"></p>
+      </div>
+
+      <div class="search-box">
+        <span>🔍</span>
+        <input id="search-input" type="text" placeholder="Search name, +971 number, bank..." oninput="renderLeads()" />
+      </div>
+      <div id="lead-list"></div>
+    </section>
+
+    <!-- TAB 2: BULK IMPORT & ADD -->
+    <section id="view-import" class="view">
+      <div class="card-box">
+        <h3>📥 Bulk Paste / CSV Lead Import (Round-Robin)</h3>
+        <p style="margin-bottom:8px;">Paste lines as: <b>Name, +971501234567, Salary AED, Bank</b>. Leads auto-assign across your team.</p>
+        <textarea id="bulk-input" rows="5" placeholder="Omar Al Zaabi, +971507788990, 21000 AED, Emirates NBD&#10;Sara Al Nuaimi, +971554433221, 16500 AED, FAB"></textarea>
+        <button class="btn-primary" onclick="importBulk()">Import & Distribute Leads</button>
+      </div>
+
+      <div class="card-box">
+        <h3>➕ Add Single UAE Lead</h3>
+        <div style="display:grid; gap:8px;">
+          <input class="input-field" id="add-name" placeholder="Customer Full Name" />
+          <input class="input-field" id="add-phone" placeholder="+971 50 000 0000" />
+          <input class="input-field" id="add-salary" placeholder="Salary (e.g. 18,500 AED)" />
+          <select id="add-bank">
+            <option value="RAKBANK">RAKBANK</option>
+            <option value="Emirates NBD">Emirates NBD (ENBD)</option>
+            <option value="FAB">First Abu Dhabi Bank (FAB)</option>
+            <option value="Mashreq">Mashreq Bank</option>
+            <option value="ADIB">ADIB</option>
+            <option value="CBD">Commercial Bank of Dubai (CBD)</option>
+          </select>
+          <button class="btn-primary" onclick="addSingleLead()">Save Lead to Queue</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: UAE BANK & FLYER HUB -->
+    <section id="view-banks" class="view">
+      <div class="card-box">
+        <h3>🏦 UAE Credit Card Benefits & Flyer Builder</h3>
+        <select id="bank-select" onchange="updateFlyer()">
+          <option value="RAKBANK">RAKBANK — Red / Titanium Cashback</option>
+          <option value="ENBD">Emirates NBD — Duo / Noon One Card</option>
+          <option value="FAB">FAB — Cashback / Manchester City Card</option>
+          <option value="Mashreq">Mashreq — Cashback / Solitaire Card</option>
+        </select>
+
+        <div class="flyer-box" id="flyer-preview">
+          <h4 id="flyer-title">RAKBANK Titanium / Red Card</h4>
+          <p style="font-size:12px; color:#cbd5e1;">Instant Digital Approval • UAE Residents</p>
+          <ul id="flyer-bullets">
+            <li>Zero Annual Fee for Life / Year 1</li>
+            <li>Up to 5% Cashback on Dining, Groceries & Fuel</li>
+            <li>Complimentary Airport Lounge Access</li>
+            <li>Minimum Salary: 5,000 – 15,000 AED</li>
+          </ul>
+          <button class="btn-primary" style="background:#22c55e;" onclick="shareFlyerWA()">📲 Send Offer on WhatsApp</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: TEAM ADMIN -->
+    <section id="view-team" class="view">
+      <div class="card-box">
+        <h3>👥 Team & Agent Productivity</h3>
+        <p style="margin-bottom:10px;">Live lead distribution & conversion tracking across your UAE sales desk.</p>
+        <div id="team-stats"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('dialer', this)"><span class="ico">📞</span>Dialer</button>
+    <button class="nav-btn" onclick="switchTab('import', this)"><span class="ico">📥</span>Import</button>
+    <button class="nav-btn" onclick="switchTab('banks', this)"><span class="ico">🏦</span>Bank Hub</button>
+    <button class="nav-btn" onclick="switchTab('team', this)"><span class="ico">👥</span>Team</button>
+  </nav>
+
+  <script>
+    const AGENTS = ["Rahul Sharma", "Neha Verma", "Pankaj Singh", "Zaid Khan"];
+    const DEFAULT_LEADS = [
+      { id: 1, name: "Khalid Al Falasi (Emirates)", phone: "+971504829104", displayPhone: "+971 50 482 9104", salary: "18,500 AED", bank: "RAKBANK", agent: "Rahul Sharma", ai: "75%", status: "Pending" },
+      { id: 2, name: "Amina Mansoori", phone: "+971526193840", displayPhone: "+971 52 619 3840", salary: "22,000 AED", bank: "Emirates NBD", agent: "Neha Verma", ai: "84%", status: "Pending" },
+      { id: 3, name: "Tariq Al Suwaidi", phone: "+971559012345", displayPhone: "+971 55 901 2345", salary: "15,000 AED", bank: "FAB", agent: "Pankaj Singh", ai: "71%", status: "Callback" },
+      { id: 4, name: "Faisal Al Hashimi", phone: "+971563344556", displayPhone: "+971 56 334 4556", salary: "26,500 AED", bank: "Mashreq", agent: "Rahul Sharma", ai: "92%", status: "Approved" }
+    ];
+
+    const BANK_DATA = {
+      RAKBANK: {
+        title: "RAKBANK Titanium / Red Credit Card",
+        bullets: ["Free for Life / Zero 1st Year Fee", "Up to 5% Cashback on Supermarkets & Dining", "VOX Cinema Buy-1-Get-1 Offers", "Fast UAE Pass / Emirates ID Digital Approval"]
+      },
+      ENBD: {
+        title: "Emirates NBD Duo / Noon One Card",
+        bullets: ["5% Back on Groceries, Utilities, Fuel & Education", "Free for Life with Zero Annual Charges", "Complimentary Golf & Airport Lounge Access", "Salary Requirement from 5,000 – 12,000 AED"]
+      },
+      FAB: {
+        title: "FAB Cashback Credit Card",
+        bullets: ["Up to 5% Cashback on Fashion, Dining & Supermarkets", "1% Cashback on All Other International & Local Spend", "Airport Lounge & VOX Movie Discounts", "Digital Same-Day Card Issuance"]
+      },
+      Mashreq: {
+        title: "Mashreq Cashback Credit Card",
+        bullets: ["Up to AED 1,000 Welcome Bonus on Spend", "5% Cashback on Dining & International Spend", "Free for Life — No Annual Fee", "Instant Approval via UAE Pass"]
+      }
+    };
+
+    let leads = JSON.parse(localStorage.getItem("salesmaster_leads_v2")) || [...DEFAULT_LEADS];
+    let currentIdx = 0;
+
+    function save() {
+      localStorage.setItem("salesmaster_leads_v2", JSON.stringify(leads));
+    }
+
+    function renderAll() {
+      const total = leads.length;
+      const pending = leads.filter(l => l.status === "Pending").length;
+      const hot = leads.filter(l => l.status === "Hot").length;
+      const callback = leads.filter(l => l.status === "Callback").length;
+      const approved = leads.filter(l => l.status === "Approved").length;
+
+      document.getElementById("kpi-total").textContent = total;
+      document.getElementById("kpi-pending").textContent = pending;
+      document.getElementById("kpi-hot").textContent = hot;
+      document.getElementById("kpi-callback").textContent = callback;
+      document.getElementById("kpi-approved").textContent = approved;
+
+      if (leads.length > 0) {
+        const cur = leads[currentIdx % leads.length];
+        document.getElementById("queue-count").textContent = `${Math.max(total - 1, 0)} in queue`;
+        document.getElementById("lead-ai").textContent = `AI ${cur.ai} • ${cur.bank}`;
+        document.getElementById("lead-agent").textContent = `Agent: ${cur.agent}`;
+        document.getElementById("lead-name").textContent = cur.name;
+        document.getElementById("lead-sub").textContent = `${cur.displayPhone} • ${cur.salary}`;
+        document.getElementById("btn-call").href = `tel:${cur.phone}`;
+        document.getElementById("ai-text").textContent =
+          `"Assalamu Alaikum / Hi ${cur.name.split(" ")[0]}, calling from the UAE Banking Desk. Based on a ${cur.salary} salary profile, you pre-qualify for the ${cur.bank} card with zero first-year annual fee and up to 5% cashback on daily UAE spend. Can I share the quick breakdown on WhatsApp?"`;
+      }
+
+      renderLeads();
+      renderTeam();
+      save();
+    }
+
+    function renderLeads() {
+      const q = document.getElementById("search-input").value.toLowerCase().trim();
+      const filtered = leads.filter(l =>
+        l.name.toLowerCase().includes(q) || l.displayPhone.toLowerCase().includes(q) || l.bank.toLowerCase().includes(q)
+      );
+      document.getElementById("lead-list").innerHTML = filtered.map(l => `
+        <div class="lead-item">
+          <div>
+            <div class="lead-item-name">${l.name}</div>
+            <div class="lead-item-meta">${l.displayPhone} • ${l.salary} • ${l.agent}</div>
+          </div>
+          <span class="tag">${l.bank} • ${l.status}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderTeam() {
+      document.getElementById("team-stats").innerHTML = AGENTS.map(agent => {
+        const mine = leads.filter(l => l.agent === agent);
+        const app = mine.filter(l => l.status === "Approved").length;
+        return `
+          <div class="lead-item">
+            <div>
+              <div class="lead-item-name">${agent}</div>
+              <div class="lead-item-meta">Assigned: ${mine.length} leads • Approved: ${app}</div>
+            </div>
+            <span class="tag">${mine.length ? Math.round((app / mine.length) * 100) : 0}% Conv</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function skipLead() {
+      if (!leads.length) return;
+      currentIdx = (currentIdx + 1) % leads.length;
+      renderAll();
+    }
+
+    function markStatus(status) {
+      if (!leads.length) return;
+      leads[currentIdx % leads.length].status = status;
+      currentIdx = (currentIdx + 1) % leads.length;
+      renderAll();
+    }
+
+    function sendWA() {
+      if (!leads.length) return;
+      const cur = leads[currentIdx % leads.length];
+      const num = cur.phone.replace(/\D/g, "");
+      const msg = encodeURIComponent(`Hello ${cur.name.split(" ")[0]}, following up regarding your ${cur.bank} credit card offer (${cur.salary} profile).`);
+      window.open(`https://wa.me/${num}?text=${msg}`, "_blank");
+    }
+
+    function toggleAI() {
+      const box = document.getElementById("ai-box");
+      box.style.display = box.style.display === "none" ? "block" : "none";
+    }
+
+    function importBulk() {
+      const lines = document.getElementById("bulk-input").value.split("\n").map(s => s.trim()).filter(Boolean);
+      if (!lines.length) return;
+      lines.forEach((line, idx) => {
+        const parts = line.split(",").map(p => p.trim());
+        const rawPhone = (parts[1] || "+971500000000").replace(/\s+/g, "");
+        leads.unshift({
+          id: Date.now() + idx,
+          name: parts[0] || "UAE Prospect",
+          phone: rawPhone,
+          displayPhone: parts[1] || rawPhone,
+          salary: parts[2] || "15,000 AED",
+          bank: parts[3] || "RAKBANK",
+          agent: AGENTS[(leads.length + idx) % AGENTS.length],
+          ai: "78%",
+          status: "Pending"
+        });
+      });
+      document.getElementById("bulk-input").value = "";
+      switchTab("dialer", document.querySelector(".nav-btn"));
+      renderAll();
+    }
+
+    function addSingleLead() {
+      const name = document.getElementById("add-name").value.trim();
+      const phone = document.getElementById("add-phone").value.trim();
+      if (!name || !phone) return;
+      leads.unshift({
+        id: Date.now(),
+        name,
+        phone: phone.replace(/\s+/g, ""),
+        displayPhone: phone,
+        salary: document.getElementById("add-salary").value.trim() || "18,000 AED",
+        bank: document.getElementById("add-bank").value,
+        agent: AGENTS[leads.length % AGENTS.length],
+        ai: "80%",
+        status: "Pending"
+      });
+      document.getElementById("add-name").value = "";
+      document.getElementById("add-phone").value = "";
+      document.getElementById("add-salary").value = "";
+      switchTab("dialer", document.querySelector(".nav-btn"));
+      renderAll();
+    }
+
+    function updateFlyer() {
+      const key = document.getElementById("bank-select").value;
+      const data = BANK_DATA[key];
+      document.getElementById("flyer-title").textContent = data.title;
+      document.getElementById("flyer-bullets").innerHTML = data.bullets.map(b => `<li>${b}</li>`).join("");
+    }
+
+    function shareFlyerWA() {
+      const title = document.getElementById("flyer-title").textContent;
+      const items = Array.from(document.querySelectorAll("#flyer-bullets li")).map(li => `• ${li.textContent}`).join("\n");
+      const msg = encodeURIComponent(`*${title}*\n${items}\n\nReply YES to check instant eligibility.`);
+      window.open(`https://wa.me/?text=${msg}`, "_blank");
+    }
+
+    function switchTab(tab, btn) {
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.getElementById(`view-${tab}`).classList.add("active");
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+    }
+
+    function openAddModal() {
+      switchTab("import", document.querySelectorAll(".nav-btn")[1]);
+    }
+
+    function resetDemo() {
+      localStorage.removeItem("salesmaster_leads_v2");
+      leads = [...DEFAULT_LEADS];
+      currentIdx = 0;
+      renderAll();
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
